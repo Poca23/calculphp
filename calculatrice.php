@@ -1,6 +1,7 @@
 <?php
 require_once 'inc/main.php';
 
+$operations = ['+', '-', '*', '/'];
 $erreurs = [];
 $resultat = null;
 $nombre1 = '';
@@ -18,20 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($nombre2 === false || $nombre2 === null) {
         $erreurs['nombre2'] = 'Le nombre 2 doit être un nombre.';
     }
-    if ($operation !== '+' && $operation !== '-') {
-        $erreurs['operation'] = "L'opération doit être + ou -.";
+    if (!in_array($operation, $operations, true)) {
+        $erreurs['operation'] = "L'opération doit être + - * ou /.";
+    }
+    if ($operation === '/' && $nombre2 === 0.0) {
+        $erreurs['nombre2'] = 'Division par zéro impossible.';
     }
 
     if (empty($erreurs)) {
-        if ($operation === '+') {
-            $resultat = $nombre1 + $nombre2;
-        } else {
-            $resultat = $nombre1 - $nombre2;
-        }
+        $resultat = calculer($nombre1, $nombre2, $operation);
     }
 }
 
-afficherPage('calculatrice', function () use ($erreurs, $resultat, $nombre1, $nombre2, $operation) { ?>
+afficherPage('calculatrice', function () use ($operations, $erreurs, $resultat, $nombre1, $nombre2, $operation) { ?>
 
     <main>
         <h2>Calculatrice</h2>
@@ -58,8 +58,9 @@ afficherPage('calculatrice', function () use ($erreurs, $resultat, $nombre1, $no
             <p>
                 <label for="operation">Opération</label>
                 <select id="operation" name="operation">
-                    <option value="+" <?= $operation === '+' ? 'selected' : '' ?>>+</option>
-                    <option value="-" <?= $operation === '-' ? 'selected' : '' ?>>-</option>
+                    <?php foreach ($operations as $op): ?>
+                        <option value="<?= $op ?>" <?= $operation === $op ? 'selected' : '' ?>><?= $op ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <?php if (isset($erreurs['operation'])): ?>
                     <span class="erreur"><?= $erreurs['operation'] ?></span>
