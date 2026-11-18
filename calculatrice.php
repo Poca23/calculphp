@@ -7,6 +7,7 @@ $resultat = null;
 $nombre1 = '';
 $nombre2 = '';
 $operation = '';
+$statut = 200;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre1 = filter_input(INPUT_POST, 'nombre1', FILTER_VALIDATE_FLOAT);
@@ -28,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($erreurs)) {
         $resultat = calculer($nombre1, $nombre2, $operation);
+    } else {
+        $statut = 422;
     }
 }
 
@@ -79,4 +82,4 @@ afficherPage('calculatrice', function () use ($operations, $erreurs, $resultat, 
         <?php endif; ?>
     </main>
 
-<?php });
+<?php }, $statut);

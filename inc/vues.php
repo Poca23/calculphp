@@ -5,15 +5,22 @@ function base()
     return __DIR__ . '/..';
 }
 
-function afficherPage($page, $contenu)
+function afficherPage($page, $contenu, $statut = 200)
 {
     [$titre, $css] = $page();
 
     try {
+        ob_start();
         require base() . '/partiel/header.php';
         $contenu();
         require base() . '/partiel/footer.php';
-    } catch (Exception $e) {
-        require base() . '/500.php';
+        $html = ob_get_clean();
+    } catch (Throwable $e) {
+        ob_end_clean();
+        error_log($e->getMessage());
+        afficherErreur(500);
     }
+
+    http_response_code($statut);
+    echo $html;
 }
