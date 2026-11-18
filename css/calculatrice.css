@@ -1,0 +1,30 @@
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input,
+select {
+  padding: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #6b4226;
+  color: #fff;
+  cursor: pointer;
+}
+
+.erreur {
+  color: #c0392b;
+  font-size: 0.9rem;
+}
+
+.resultat {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
