@@ -23,6 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($operation, $operations, true)) {
         $erreurs['operation'] = "L'opération doit être + - * ou /.";
     }
+    if (is_infinite((float) $nombre1) || is_infinite((float) $nombre2)) {
+        $erreurs['nombre1'] = 'Les nombres sont trop grands.';
+    }
     if ($operation === '/' && $nombre2 === 0.0) {
         $erreurs['nombre2'] = 'Division par zéro impossible.';
     }
